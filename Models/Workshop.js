@@ -21,16 +21,9 @@ const workshopSchema = new Schema({
   },
   questions: [
     {
-      text: {
-        type: String,
-        ref: "Question",
-        required: true
-      },
-      questionId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "Question"
-      }
+      type: String,
+      ref: "Question",
+      required: true
     }
   ],
   usersRegistered: [

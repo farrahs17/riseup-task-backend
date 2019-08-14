@@ -1,5 +1,5 @@
 const Workshop = require("../Models/Workshop");
-const { addQuestion } = require("./questionController");
+const { addQuestion, getQuestions } = require("./questionController");
 exports.getAllWorkshops = (req, res, next) => {
   Workshop.find()
     .then(workshop => {
@@ -29,9 +29,10 @@ exports.addWorkshop = (req, res, next) => {
     time: time
   })
     .then(result => {
-      res.status(200).json({ msg: "success" });
       addQuestion(questions, result._id);
       console.log(result);
+      console.log(result._id);
+      res.status(200).json({ msg: "success" });
     })
     .catch(err => {
       console.log(err);
@@ -45,6 +46,7 @@ exports.getWorkshopById = (req, res, next) => {
   Workshop.findOne({ _id: workshopId })
     .then(workshop => {
       console.log(workshop);
+      getQuestions(workshop);
       res.status(200).json({
         workshop: workshop
       });
