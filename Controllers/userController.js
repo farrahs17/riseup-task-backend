@@ -3,39 +3,28 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 exports.addNewUser = (req, res, next) => {
-  const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
 
-  const emailQuery = User.findOne({ email });
-  const userNameQuery = User.findOne({ username });
-
-  Promise.all([emailQuery, userNameQuery])
+  User.findOne({ email })
     .then(results => {
-      const userFromEmail = results[0];
-      const userFromUsername = results[1];
-      if (userFromEmail) {
+      console.log(results);
+      if (results) {
         return res.json({ msg: "Email already in use" });
       }
-      if (userFromUsername) {
-        return res.json({ msg: "Username is taken" });
-      }
-      bcrypt
-        .hash(password, 10)
-        .then(hash => {
-          return User.create({
-            username: username,
-            email: email,
-            password: hash
+      bcrypt.hash(password, 10).then(hash => {
+        return User.create({
+          email: email,
+          password: hash
+        })
+          .then(result => {
+            res.status(200).json({ msg: "success" });
+            console.log(result);
+          })
+          .catch(err => {
+            console.log(err);
           });
-        })
-        .then(result => {
-          res.status(200).json({ msg: "success" });
-          console.log("created user");
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      });
     })
     .catch(err => {
       console.log(err);
@@ -44,11 +33,11 @@ exports.addNewUser = (req, res, next) => {
 };
 
 exports.logIn = (req, res, next) => {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
 
   User.findOne({
-    username: username
+    email: email
   })
     .then(user => {
       if (!user) {
@@ -62,12 +51,12 @@ exports.logIn = (req, res, next) => {
         .catch(err => console.log(err));
       const token = jwt.sign(
         {
-          username: user.username,
           userId: user._id.toString()
         },
         "lMUZxRmYp0K3dU7GRM3PKJXAFAtDgZlO",
         { expiresIn: "24h" }
       );
+
       res.status(200).json({ token: token, userId: user._id.toString() });
       console.log(res);
     })
