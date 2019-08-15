@@ -5,23 +5,29 @@ const jwt = require("jsonwebtoken");
 exports.addNewUser = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log(req);
 
-  User.findOne({ email })
+  User.findOne({ email: req.body.email })
     .then(results => {
-      console.log(results);
+      console.log("1111111111", results);
       if (results) {
         return res.json({ msg: "Email already in use" });
       }
-      bcrypt.hash(password, 10).then(hash => {
+
+      return bcrypt.hash(password, 10).then(hash => {
         return User.create({
           email: email,
           password: hash
         })
           .then(result => {
-            res.status(200).json({ msg: "success" });
+            console.log("2222222222", result);
+            // res.redirect(200, "http://localhost:3000/login");
+            console.log("created user");
             console.log(result);
+            res.status(200).json({ msg: "success" });
           })
           .catch(err => {
+            res.status(400).json({ msg: "failed" });
             console.log(err);
           });
       });

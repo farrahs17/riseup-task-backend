@@ -16,17 +16,17 @@ const userSchema = new Schema({
     {
       answerId: {
         type: Schema.Types.ObjectId,
-        required: true,
+
         ref: "Answer"
       },
       answer: {
         type: Schema.Types.String,
-        required: true,
+
         ref: "Answer"
       },
       workshopId: {
         type: Schema.Types.ObjectId,
-        required: true,
+
         ref: "Workshop"
       }
     }
