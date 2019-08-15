@@ -8,18 +8,13 @@ const Schema = mongoose.Schema;
 
 const answerSchema = new Schema({
   answer: {
-    type: String,
+    type: Array,
     required: true
   },
   workshopId: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "Workshop"
-  },
-  questionId: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "Question"
   },
   userId: {
     type: Schema.Types.ObjectId,

@@ -19,34 +19,32 @@ exports.getAnswers = (req, res, next) => {
 };
 
 exports.addAnswer = (req, res, next) => {
-  const answer = req.body.answer;
+  const answers = req.body.answers;
   const workshopId = req.body.workshopId;
-  const questionId = req.body.questionId;
-  // let username = req.username;
   const userId = req.userId;
-  console.log(req);
+  console.log(req.body);
   Answer.create({
-    answer: answer,
+    answer: answers,
     workshopId: workshopId,
-    questionId: questionId,
     userId: userId
   })
     .then(answer => {
       User.update(
         { _id: userId },
         {
-          $push: {
-            answers: answer
+          $set: {
+            answers: answers
           }
         }
       )
         .then(result => {
+          console.log(result);
           res.status(200).json({ msg: "success" });
-          console.log("Created question");
+          console.log("Created answer");
         })
         .catch(err => {
           console.log(err);
-          res.status(401).json({ msg: "failed" });
+          res.status(404).json({ msg: "failed" });
         });
     })
     .catch(err => console.log(err));

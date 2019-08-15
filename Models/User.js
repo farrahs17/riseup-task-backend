@@ -14,21 +14,9 @@ const userSchema = new Schema({
   },
   answers: [
     {
-      answerId: {
-        type: Schema.Types.ObjectId,
-
-        ref: "Answer"
-      },
-      answer: {
-        type: Schema.Types.String,
-
-        ref: "Answer"
-      },
-      workshopId: {
-        type: Schema.Types.ObjectId,
-
-        ref: "Workshop"
-      }
+      type: String,
+      ref: "Answer",
+      required: true
     }
   ]
 });

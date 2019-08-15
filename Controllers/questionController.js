@@ -19,11 +19,6 @@ exports.getQuestions = questionId => {
 };
 
 exports.addQuestion = (questions, workshopId) => {
-  // const text = req.body.text;
-  // const workshopId = req.body.workshopId;
-  //   let username = req.username;
-  // const userId = req.userId;
-
   Question.create({
     text: questions,
     workshopId: workshopId
