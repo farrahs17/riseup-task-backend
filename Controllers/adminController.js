@@ -57,7 +57,7 @@ exports.logIn = (req, res, next) => {
         "lMUZxRmYp0K3dU7GRM3PKJXAFAtDgZlO",
         { expiresIn: "24h" }
       );
-      res.status(200).json({ token: token, adminId: admin._id.toString() });
+      res.status(200).json({ token: token });
       console.log(res);
     })
     .catch(err => {
