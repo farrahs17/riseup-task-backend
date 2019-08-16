@@ -1,4 +1,5 @@
 const Workshop = require("../Models/Workshop");
+const Admin = require("../Models/Admin");
 const { addQuestion, getQuestions } = require("./questionController");
 exports.getAllWorkshops = (req, res, next) => {
   Workshop.find()
@@ -22,21 +23,31 @@ exports.addWorkshop = (req, res, next) => {
   let time = req.body.time;
   const userId = req.userId;
   console.log(req);
-  Workshop.create({
-    title: title,
-    description: description,
-    location: location,
-    time: time
-  })
-    .then(result => {
-      addQuestion(questions, result._id);
-      console.log(result);
-      console.log(result._id);
-      res.status(200).json({ msg: "success" });
+
+  Admin.findOne({ _id: userId })
+    .then(admin => {
+      if (!admin) {
+        return res
+          .status(401)
+          .json({ msg: "You must be admin to add workshop" });
+      }
+      Workshop.create({
+        title: title,
+        description: description,
+        location: location,
+        time: time
+      })
+        .then(result => {
+          addQuestion(questions, result._id);
+          res.status(200).json({ msg: "success" });
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(400).json({ msg: "failed" });
+        });
     })
     .catch(err => {
       console.log(err);
-      res.status(400).json({ msg: "failed" });
     });
 };
 
